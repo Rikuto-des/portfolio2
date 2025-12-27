@@ -10,6 +10,14 @@ const navItems = [
 
 export const Navbar = () => {
   const [activeSection, setActiveSection] = useState('home');
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,10 +64,17 @@ export const Navbar = () => {
         </button>
       </motion.div>
 
-      {/* Navigation Menu - Floating Island Top */}
-      <nav className="fixed top-6 md:top-8 left-1/2 -translate-x-1/2 z-50 px-4 w-full md:w-auto flex justify-center pointer-events-none" role="navigation" aria-label="メインナビゲーション">
+      {/* Navigation Menu - Floating Island (Responsive Position) */}
+      <nav 
+        className={`fixed left-1/2 -translate-x-1/2 z-50 px-4 w-full md:w-auto flex justify-center pointer-events-none ${
+          isMobile ? 'bottom-8' : 'top-6 md:top-8'
+        }`} 
+        role="navigation" 
+        aria-label="メインナビゲーション"
+      >
         <motion.div 
-          initial={{ y: -100, opacity: 0 }}
+          key={isMobile ? 'mobile-nav' : 'desktop-nav'}
+          initial={{ y: isMobile ? 100 : -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.8, type: "spring", stiffness: 100, damping: 20 }}
           className="bg-white/80 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.08)] rounded-full px-2 py-2 pointer-events-auto flex items-center gap-1 md:gap-2"
