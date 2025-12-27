@@ -34,6 +34,8 @@ export const Layout = () => {
       <SmoothScroll isStopping={!!selectedProject} />
       <MinimalBackground />
 
+      <Navbar />
+
       <motion.div
         animate={{
           opacity: selectedProject ? 0.4 : 1,
@@ -47,8 +49,6 @@ export const Layout = () => {
         }}
         className="relative z-10 w-full"
       >
-        <Navbar />
-
         <main className="w-full">
           {sections.map((section) => (
             <motion.section
