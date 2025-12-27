@@ -12,27 +12,26 @@ export const Projects = ({ onProjectSelect, selectedProjectId }: ProjectsProps) 
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <section id="projects" className="min-h-screen py-24 md:py-40 relative z-10 bg-transparent overflow-hidden">
+    <section id="projects" className="py-16 md:py-24 relative z-10 bg-transparent overflow-hidden">
       {/* Background Section Header */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 mb-20 relative z-10">
-        <header className="space-y-4">
-          <motion.span
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="font-tech text-minimal-accent text-[10px] md:text-xs tracking-[0.4em] uppercase font-bold block"
-          >
-            // Digital Archive .0{projects.length}
-          </motion.span>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-5xl md:text-8xl font-bold tracking-tighter text-minimal-text font-display leading-[0.8]"
-          >
-            PROJECT<br />GRID
-          </motion.h2>
-        </header>
+      <div className="max-w-7xl mx-auto px-6 md:px-12 mb-10 md:mb-16 relative z-10">
+        <motion.header 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="space-y-4"
+        >
+          <div className="flex items-center gap-4">
+            <span className="font-tech text-minimal-accent text-[10px] md:text-xs tracking-[0.4em] uppercase font-bold">
+              // Digital Archive .0{projects.length}
+            </span>
+            <div className="h-px w-12 md:w-20 bg-minimal-accent/20" />
+          </div>
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-minimal-text font-display leading-[0.9]">
+            PROJECT GRID
+          </h2>
+        </motion.header>
       </div>
 
       {/* Optimized Background Display (No AnimatePresence for hover to avoid lag) */}
@@ -120,7 +119,7 @@ export const Projects = ({ onProjectSelect, selectedProjectId }: ProjectsProps) 
       </div>
 
       {/* Selection Progress Footer */}
-      <div className="mt-32 text-center relative z-20">
+      <div className="mt-12 text-center relative z-20">
         <p className="font-tech text-minimal-gray text-[9px] tracking-[0.6em] uppercase opacity-30 select-none">
           Digital Archive Transmission Complete
         </p>

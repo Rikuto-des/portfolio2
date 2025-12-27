@@ -93,17 +93,31 @@ export const Home = () => {
         role="main"
         aria-label="ホームページ"
       >
-        <div className="mb-6 overflow-hidden">
+        <div className="mb-6 overflow-hidden flex items-center justify-center gap-4">
+          <motion.div 
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 1.2 }}
+            className="h-px w-8 md:w-16 bg-minimal-accent/20" 
+          />
           <motion.div
             initial={{ opacity: 0, letterSpacing: "1em" }}
             whileInView={{ opacity: 1, letterSpacing: "0.3em" }}
             viewport={{ once: true }}
             transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 1 }}
           >
-            <span className="text-minimal-accent font-tech uppercase tracking-[0.3em] text-xs md:text-sm font-bold">
+            <span className="text-minimal-accent font-tech uppercase tracking-[0.4em] text-[10px] md:text-xs font-bold">
               // RE-DEFINING DIGITAL AESTHETICS
             </span>
           </motion.div>
+          <motion.div 
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 1.2 }}
+            className="h-px w-8 md:w-16 bg-minimal-accent/20" 
+          />
         </div>
 
         <TypewriterText
@@ -122,7 +136,7 @@ export const Home = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 2, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="space-y-4 max-w-2xl mx-auto border-l border-minimal-accent/30 pl-6 md:pl-8 text-left mb-12 md:mb-16"
+          className="space-y-4 max-w-2xl mx-auto border-l-2 border-minimal-accent/20 pl-6 md:pl-8 text-left mb-12 md:mb-16"
         >
           <p className="text-base sm:text-lg md:text-2xl text-minimal-text font-sans font-medium leading-tight">
             デジタルと感性が交差する、<br className="md:hidden" />新しい体験の形を構築する。
@@ -142,12 +156,12 @@ export const Home = () => {
           <Magnetic strength={0.3}>
             <button
               onClick={() => scrollToSection('projects')}
-              className="w-full sm:w-auto group relative px-10 md:px-12 py-4 md:py-5 bg-minimal-accent text-white hover:bg-indigo-700 transition-all duration-500 rounded-full focus:outline-none overflow-hidden"
+              className="w-full sm:w-auto group relative px-10 md:px-12 py-4 md:py-5 bg-minimal-accent text-white hover:bg-indigo-700 transition-all duration-500 rounded-2xl focus:outline-none overflow-hidden"
             >
               <motion.div
                 className="absolute inset-0 bg-white/10 -translate-x-full group-hover:translate-x-full transition-transform duration-700 skew-x-12"
               />
-              <span className="relative z-10 text-xs md:text-sm tracking-[0.2em] uppercase font-tech font-bold">
+              <span className="relative z-10 text-xs md:text-sm tracking-[0.3em] uppercase font-tech font-bold">
                 See My Work
               </span>
             </button>
@@ -156,9 +170,9 @@ export const Home = () => {
           <Magnetic strength={0.3}>
             <button
               onClick={() => scrollToSection('about')}
-              className="w-full sm:w-auto group relative px-10 md:px-12 py-4 md:py-5 border border-minimal-text/10 hover:border-minimal-text transition-all duration-500 rounded-full focus:outline-none"
+              className="w-full sm:w-auto group relative px-10 md:px-12 py-4 md:py-5 border border-minimal-text/10 hover:border-minimal-text transition-all duration-500 rounded-2xl focus:outline-none"
             >
-              <span className="relative z-10 text-xs md:text-sm tracking-[0.2em] uppercase font-tech text-minimal-text group-hover:text-minimal-accent transition-colors">
+              <span className="relative z-10 text-xs md:text-sm tracking-[0.3em] uppercase font-tech text-minimal-text group-hover:text-minimal-accent transition-colors">
                 Contact
               </span>
             </button>

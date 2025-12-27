@@ -7,14 +7,23 @@ export const About = () => {
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8 }}
-      className="min-h-screen flex flex-col justify-center px-6 md:px-8 max-w-4xl mx-auto z-10 relative py-24 md:py-40"
+      className="flex flex-col justify-center px-6 md:px-8 max-w-4xl mx-auto z-10 relative py-16 md:py-24"
     >
-      <div className="overflow-hidden mb-10 md:mb-12">
-        <h2 className="text-4xl md:text-8xl font-bold tracking-tighter mb-4 text-minimal-text font-display">
-          ABOUT<br />EXPERIENCE
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="overflow-hidden mb-10 md:mb-12 space-y-4"
+      >
+        <div className="flex items-center gap-4">
+          <span className="font-tech text-minimal-accent text-[10px] md:text-xs tracking-[0.4em] uppercase font-bold">// Narrative</span>
+          <div className="h-px w-12 md:w-20 bg-minimal-accent/20" />
+        </div>
+        <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-minimal-text font-display">
+          ABOUT EXPERIENCE
         </h2>
-        <span className="font-tech text-minimal-accent text-[10px] md:text-xs tracking-[0.4em] uppercase font-bold">// Narrative</span>
-      </div>
+      </motion.div>
 
       <div className="space-y-12 relative">
         <div className="pl-5 md:pl-10 space-y-10 md:space-y-12 border-l-2 border-minimal-accent/20">
@@ -65,23 +74,22 @@ export const About = () => {
       </motion.div>
 
       {/* Contact Section */}
-      <section className="mt-32 md:mt-48 w-full">
+      <section className="mt-16 md:mt-24 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24">
 
           {/* Left Side: Contact Info */}
           <div className="space-y-12">
             <div className="space-y-6">
-              <motion.span
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                className="font-tech text-minimal-accent text-[10px] md:text-xs tracking-[0.4em] uppercase font-bold block"
-              >
-                // Get in Touch
-              </motion.span>
-              <h2 className="text-4xl md:text-7xl font-bold tracking-tighter text-minimal-text font-display leading-none">
-                CONTACT<br />SYSTEM
+              <div className="flex items-center gap-4">
+                <span className="font-tech text-minimal-accent text-[10px] md:text-xs tracking-[0.4em] uppercase font-bold">
+                  // Get in Touch
+                </span>
+                <div className="h-px w-12 md:w-20 bg-minimal-accent/20" />
+              </div>
+              <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-minimal-text font-display leading-none">
+                CONTACT SYSTEM
               </h2>
-              <p className="text-minimal-gray leading-relaxed text-sm md:text-base max-w-sm">
+              <p className="text-minimal-gray leading-relaxed text-sm md:text-base max-w-sm pt-2">
                 新しいプロジェクトの相談、コラボレーション、または単なる挨拶でも、お気軽にご連絡ください。通常24時間以内に返信いたします。
               </p>
             </div>
@@ -116,7 +124,7 @@ export const About = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="space-y-8 p-8 md:p-12 bg-white/40 backdrop-blur-2xl rounded-[3rem] border border-minimal-accent/10 shadow-2xl relative overflow-hidden"
+            className="space-y-8 p-8 md:p-12 bg-white/40 backdrop-blur-2xl rounded-3xl border border-minimal-accent/10 shadow-2xl relative overflow-hidden"
             onSubmit={(e) => e.preventDefault()}
           >
             {/* Form Scanline animation */}
@@ -151,7 +159,7 @@ export const About = () => {
 
             <button
               type="submit"
-              className="w-full group relative overflow-hidden h-16 bg-minimal-text text-minimal-bg font-tech text-[10px] sm:text-xs font-bold uppercase tracking-[0.4em] transition-all duration-500 hover:tracking-[0.6em] rounded-2xl"
+              className="w-full group relative overflow-hidden h-16 bg-minimal-text text-minimal-bg font-tech text-[10px] sm:text-xs font-bold uppercase tracking-[0.3em] transition-all duration-500 hover:tracking-[0.5em] rounded-2xl"
             >
               <span className="relative z-10">Initialize Transmission // 送信</span>
               <div className="absolute inset-0 bg-minimal-accent translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
@@ -162,7 +170,7 @@ export const About = () => {
       </section>
 
       {/* Footer Branding */}
-      <footer className="mt-40 pt-20 pb-10 text-center border-t border-minimal-text/5 w-screen -mx-[calc((100vw-100%)/2)]">
+      <footer className="mt-20 pt-12 pb-10 text-center border-t border-minimal-text/5 w-screen -mx-[calc((100vw-100%)/2)]">
         <p className="font-tech text-[9px] text-minimal-gray/30 tracking-[0.6em] uppercase">
           © 2024 DESIGN ARCHIVE ARCHETYPE // CODED IN TOKYO
         </p>

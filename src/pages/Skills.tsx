@@ -10,18 +10,18 @@ const designSkills = [
 
 export const Skills = () => {
   return (
-    <div className="min-h-screen py-24 md:py-40 px-6 md:px-8 max-w-5xl mx-auto relative z-10">
-      <header className="mb-16 md:mb-32 space-y-6">
+    <div className="py-16 md:py-24 px-6 md:px-8 max-w-5xl mx-auto relative z-10">
+      <header className="mb-10 md:mb-16 space-y-4">
         <div className="flex items-center gap-4">
           <span className="font-tech text-minimal-accent text-[10px] md:text-xs tracking-[0.4em] uppercase font-bold">// Expertise</span>
           <div className="h-px w-12 md:w-20 bg-minimal-accent/20" />
         </div>
-        <h2 className="text-5xl md:text-9xl font-bold tracking-tighter text-minimal-text font-display leading-[0.9]">
-          DESIGN<br />POWERS
+        <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-minimal-text font-display leading-[0.9]">
+          DESIGN POWERS
         </h2>
-        <div className="pt-6 md:pt-8 border-l-2 border-minimal-accent pl-5 md:pl-6">
-          <p className="text-minimal-text font-sans text-lg md:text-xl font-medium">感性と論理が織りなす、静かな調律。</p>
-          <p className="text-minimal-gray font-tech text-[10px] md:text-xs tracking-widest uppercase opacity-60 mt-1 md:mt-2">Elevating digital through aesthetic precision.</p>
+        <div className="pt-4 md:pt-5 border-l-2 border-minimal-accent pl-4 md:pl-5">
+          <p className="text-minimal-text font-sans text-base md:text-lg font-medium">感性と論理が織りなす、静かな調律。</p>
+          <p className="text-minimal-gray font-tech text-[10px] md:text-xs tracking-widest uppercase opacity-60 mt-1">Elevating digital through aesthetic precision.</p>
         </div>
       </header>
 
@@ -33,11 +33,11 @@ export const Skills = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="group relative border-b border-minimal-text/5 py-12 md:py-16 flex flex-col md:flex-row md:items-center justify-between gap-8 hover:bg-slate-50/50 transition-colors duration-500 px-4 -mx-4 rounded-xl"
+            className="group relative border-b border-minimal-accent/20 py-6 md:py-8 flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 hover:bg-slate-50/50 transition-colors duration-500 px-4 -mx-4 rounded-3xl"
           >
             <div className="space-y-2 max-w-md">
               <span className="text-minimal-accent font-tech text-[10px] tracking-widest font-bold uppercase block">0{index + 1}</span>
-              <h3 className="text-3xl md:text-5xl font-bold text-minimal-text font-display group-hover:translate-x-4 transition-transform duration-700 ease-[0.16,1,0.3,1]">
+              <h3 className="text-xl md:text-2xl font-bold text-minimal-text font-display group-hover:translate-x-2 transition-transform duration-700 ease-[0.16,1,0.3,1]">
                 {skill.name}
               </h3>
             </div>
@@ -66,7 +66,7 @@ export const Skills = () => {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ delay: 0.6, duration: 1 }}
-        className="mt-32 text-center"
+        className="mt-12 text-center"
       >
         <p className="text-minimal-gray font-sans text-sm italic opacity-40">
           * Always evolving with new tools and philosophies.
