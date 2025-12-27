@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&family=Syncopate:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-minimal-bg text-minimal-text font-sans antialiased overflow-hidden;
+    margin: 0;
+    padding: 0;
+  }
+  
+  #root {
+    width: 100vw;
+    height: 100vh;
+  }
+}
+
+@layer components {
+  .minimal-btn {
+    @apply px-6 py-2 border border-minimal-text/30 text-minimal-text text-sm tracking-widest uppercase transition-all duration-300 hover:bg-minimal-text hover:text-minimal-bg cursor-pointer;
+  }
+  
+  .minimal-card {
+    @apply bg-minimal-accent/5 backdrop-blur-sm border border-minimal-text/10 p-6 hover:border-minimal-text/30 transition-all duration-300;
+  }
+}
