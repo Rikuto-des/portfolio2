@@ -59,10 +59,10 @@ export const CustomCursor = () => {
     }, [mouseX, mouseY]);
 
     return (
-        <>
+        <div className="fixed inset-0 pointer-events-none z-[100000] overflow-hidden">
             {/* メインカーソル（中心の点） */}
             <motion.div
-                className="fixed top-0 left-0 w-1.5 h-1.5 bg-minimal-text rounded-full pointer-events-none z-[100001]"
+                className="absolute top-0 left-0 w-1.5 h-1.5 bg-minimal-text rounded-full z-[2]"
                 style={{
                     x: dotX,
                     y: dotY,
@@ -73,7 +73,7 @@ export const CustomCursor = () => {
 
             {/* 追従するリングカーソル */}
             <motion.div
-                className="fixed top-0 left-0 pointer-events-none z-[100000] rounded-full"
+                className="absolute top-0 left-0 z-[1] rounded-full"
                 style={{
                     x: cursorX,
                     y: cursorY,
@@ -105,7 +105,7 @@ export const CustomCursor = () => {
                     />
                 )}
             </motion.div>
-        </>
+        </div>
     );
 };
 
