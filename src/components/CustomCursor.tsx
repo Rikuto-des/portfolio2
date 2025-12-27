@@ -87,7 +87,7 @@ export const CustomCursor = () => {
                     scale: isClicked ? 0.8 : 1,
                     color: cursorType === 'accent' ? '#6366f1' : '#111827',
                     opacity: isHovered ? 0.3 : 0.6,
-                    backgroundColor: isHovered ? 'rgba(99, 102, 241, 0.05)' : 'transparent',
+                    backgroundColor: isHovered ? 'rgba(99, 102, 241, 0.05)' : 'rgba(99, 102, 241, 0)',
                 }}
                 transition={{
                     type: 'spring',
