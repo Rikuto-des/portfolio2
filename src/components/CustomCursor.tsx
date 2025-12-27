@@ -1,10 +1,17 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 export const CustomCursor = () => {
     const [isHovered, setIsHovered] = useState(false);
     const [isClicked, setIsClicked] = useState(false);
     const [cursorType, setCursorType] = useState('default');
+    const [mounted, setMounted] = useState(false);
+
+    // マウント確認
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     // マウス座標（framer-motion value）
     const mouseX = useMotionValue(-100);
@@ -58,7 +65,9 @@ export const CustomCursor = () => {
         };
     }, [mouseX, mouseY]);
 
-    return (
+    if (!mounted) return null;
+
+    return createPortal(
         <div className="fixed inset-0 pointer-events-none z-[100000] overflow-hidden">
             {/* メインカーソル（中心の点） */}
             <motion.div
@@ -105,7 +114,8 @@ export const CustomCursor = () => {
                     />
                 )}
             </motion.div>
-        </div>
+        </div>,
+        document.body
     );
 };
 
