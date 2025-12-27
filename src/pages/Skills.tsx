@@ -1,84 +1,77 @@
-import { motion, type Variants } from 'framer-motion';
+import { motion } from 'framer-motion';
 
-const container: Variants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1
-    }
-  }
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, x: -20 },
-  show: { opacity: 1, x: 0, transition: { type: "spring", stiffness: 50, damping: 20 } }
-};
-
-const skills = [
-  { name: 'Illustrator', level: 90 },
-  { name: 'Figma', level: 95 },
-  { name: 'Photoshop', level: 85 },
-  { name: 'After Effects', level: 80 },
-  { name: 'HTML/CSS', level: 90 },
-  { name: 'React', level: 85 },
-  { name: 'TailwindCSS', level: 90 },
-  { name: 'WebGL', level: 70 },
-  { name: 'TypeScript', level: 80 },
-  { name: 'Node.js', level: 65 },
+const designSkills = [
+  { name: 'UI/UX Design', tools: 'Figma, Adobe XD', desc: 'User-centered interfaces with a focus on usability.' },
+  { name: 'Graphic Design', tools: 'Illustrator, Photoshop', desc: 'Brand identity and visual communication.' },
+  { name: 'Motion Design', tools: 'After Effects, Lottie', desc: 'Bringing interfaces to life through motion.' },
+  { name: 'Design Systems', tools: 'Foundation, Scaling', desc: 'Building consistent and scalable visual languages.' },
+  { name: 'Prototyping', tools: 'Protopie, Framer', desc: 'High-fidelity interactive demonstrations.' },
 ];
 
 export const Skills = () => {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8 }}
-      className="min-h-screen flex flex-col justify-center px-8 max-w-5xl mx-auto py-20"
-    >
-      <div className="mb-16">
-        <h2 className="text-3xl md:text-5xl font-bold tracking-tighter mb-4 text-minimal-text">
-          Technical Arsenal
+    <div className="min-h-screen py-24 md:py-40 px-6 md:px-8 max-w-5xl mx-auto relative z-10">
+      <header className="mb-16 md:mb-32 space-y-6">
+        <div className="flex items-center gap-4">
+          <span className="font-tech text-minimal-accent text-[10px] md:text-xs tracking-[0.4em] uppercase font-bold">// Expertise</span>
+          <div className="h-px w-12 md:w-20 bg-minimal-accent/20" />
+        </div>
+        <h2 className="text-5xl md:text-9xl font-bold tracking-tighter text-minimal-text font-display leading-[0.9]">
+          DESIGN<br />POWERS
         </h2>
-        <p className="font-tech text-minimal-gray text-sm tracking-widest uppercase">// Technical Arsenal</p>
+        <div className="pt-6 md:pt-8 border-l-2 border-minimal-accent pl-5 md:pl-6">
+          <p className="text-minimal-text font-sans text-lg md:text-xl font-medium">感性と論理が織りなす、静かな調律。</p>
+          <p className="text-minimal-gray font-tech text-[10px] md:text-xs tracking-widest uppercase opacity-60 mt-1 md:mt-2">Elevating digital through aesthetic precision.</p>
+        </div>
+      </header>
+
+      <div className="space-y-0">
+        {designSkills.map((skill, index) => (
+          <motion.div
+            key={skill.name}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="group relative border-b border-minimal-text/5 py-12 md:py-16 flex flex-col md:flex-row md:items-center justify-between gap-8 hover:bg-slate-50/50 transition-colors duration-500 px-4 -mx-4 rounded-xl"
+          >
+            <div className="space-y-2 max-w-md">
+              <span className="text-minimal-accent font-tech text-[10px] tracking-widest font-bold uppercase block">0{index + 1}</span>
+              <h3 className="text-3xl md:text-5xl font-bold text-minimal-text font-display group-hover:translate-x-4 transition-transform duration-700 ease-[0.16,1,0.3,1]">
+                {skill.name}
+              </h3>
+            </div>
+
+            <div className="flex-1 md:max-w-xs space-y-1 md:space-y-2">
+              <span className="text-minimal-gray font-tech text-[9px] md:text-[10px] tracking-[0.2em] uppercase block">Tools</span>
+              <p className="text-minimal-text font-sans font-medium text-base md:text-lg leading-none">
+                {skill.tools}
+              </p>
+            </div>
+
+            <div className="md:max-w-sm">
+              <p className="text-minimal-gray font-sans text-xs md:text-base leading-relaxed opacity-70 md:opacity-60 md:group-hover:opacity-100 transition-opacity">
+                {skill.desc}
+              </p>
+            </div>
+
+            {/* Hover Background Accent */}
+            <div className="absolute left-0 bottom-0 w-0 h-px bg-minimal-accent group-hover:w-full transition-all duration-700 ease-in-out" />
+          </motion.div>
+        ))}
       </div>
 
       <motion.div
-        variants={container}
-        initial="hidden"
-        whileInView="show"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        className="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-8"
+        transition={{ delay: 0.6, duration: 1 }}
+        className="mt-32 text-center"
       >
-        {skills.map((skill) => (
-          <motion.div key={skill.name} variants={itemVariants} className="relative group">
-            <div className="flex justify-between mb-2 items-end">
-              <span className="text-sm md:text-base font-bold text-minimal-text tracking-widest font-display uppercase group-hover:text-minimal-accent transition-colors">
-                {skill.name}
-              </span>
-              <span className="text-xs font-mono text-minimal-accent font-tech">{skill.level}%</span>
-            </div>
-
-            <div className="h-1 bg-minimal-gray/20 w-full overflow-hidden relative rounded-full">
-              <motion.div
-                initial={{ width: 0 }}
-                whileInView={{ width: `${skill.level}%` }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-                className="h-full bg-minimal-text relative z-10 group-hover:bg-minimal-accent transition-colors duration-300"
-              />
-              <motion.div
-                initial={{ width: 0 }}
-                whileInView={{ width: `${skill.level}%` }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-                className="absolute inset-0 bg-minimal-accent blur-[4px] opacity-0 group-hover:opacity-70 transition-opacity duration-300"
-              />
-            </div>
-          </motion.div>
-        ))}
+        <p className="text-minimal-gray font-sans text-sm italic opacity-40">
+          * Always evolving with new tools and philosophies.
+        </p>
       </motion.div>
-    </motion.div>
+    </div>
   );
 };

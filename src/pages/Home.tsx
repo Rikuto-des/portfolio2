@@ -1,4 +1,6 @@
-import { motion, type Variants } from 'framer-motion';
+import { motion, useScroll, useTransform, type Variants } from 'framer-motion';
+import { useRef } from 'react';
+import { Magnetic } from '../components/Magnetic';
 
 interface TypewriterTextProps {
   text: string;
@@ -13,7 +15,7 @@ const TypewriterText = ({ text, delay = 0, className = "" }: TypewriterTextProps
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.05, delayChildren: delay }
+      transition: { staggerChildren: 0.03, delayChildren: delay }
     }
   };
 
@@ -21,34 +23,43 @@ const TypewriterText = ({ text, delay = 0, className = "" }: TypewriterTextProps
     visible: {
       opacity: 1,
       y: 0,
+      rotateX: 0,
+      scale: 1,
       filter: "blur(0px)",
       transition: {
         type: "spring",
-        damping: 12,
-        stiffness: 200,
+        damping: 25,
+        stiffness: 120,
       },
     },
     hidden: {
       opacity: 0,
-      y: 20,
+      y: 80,
+      rotateX: 45,
+      scale: 0.8,
       filter: "blur(10px)",
       transition: {
         type: "spring",
-        damping: 12,
-        stiffness: 200,
+        damping: 25,
+        stiffness: 120,
       },
     },
   };
 
   return (
     <motion.div
-      className={`overflow-hidden flex flex-wrap justify-center ${className}`}
+      className={`overflow-hidden flex flex-wrap justify-center perspective-1000 py-4 ${className}`}
       variants={container}
       initial="hidden"
-      animate="visible"
+      whileInView="visible"
+      viewport={{ once: true }}
     >
       {letters.map((letter, index) => (
-        <motion.span variants={child} key={index}>
+        <motion.span
+          variants={child}
+          key={index}
+          className="inline-block transform-gpu origin-bottom"
+        >
           {letter === " " ? "\u00A0" : letter}
         </motion.span>
       ))}
@@ -57,6 +68,16 @@ const TypewriterText = ({ text, delay = 0, className = "" }: TypewriterTextProps
 };
 
 export const Home = () => {
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, 400]);
+  const opacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.4], [1, 0.9]);
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -65,71 +86,105 @@ export const Home = () => {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8 }}
-      className="min-h-screen w-full flex flex-col justify-center items-center text-center px-4 relative z-10 pt-20"
-      role="main"
-      aria-label="ホームページ"
-    >
-      <div className="mb-2 overflow-hidden">
+    <div ref={containerRef} className="h-screen w-full relative overflow-hidden flex flex-col justify-center items-center">
+      <motion.div
+        style={{ y: y1, opacity, scale }}
+        className="text-center px-4 relative z-10 pt-20"
+        role="main"
+        aria-label="ホームページ"
+      >
+        <div className="mb-6 overflow-hidden">
+          <motion.div
+            initial={{ opacity: 0, letterSpacing: "1em" }}
+            whileInView={{ opacity: 1, letterSpacing: "0.3em" }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 1 }}
+          >
+            <span className="text-minimal-accent font-tech uppercase tracking-[0.3em] text-xs md:text-sm font-bold">
+              // RE-DEFINING DIGITAL AESTHETICS
+            </span>
+          </motion.div>
+        </div>
+
+        <TypewriterText
+          text="CREATIVE"
+          className="text-5xl sm:text-7xl md:text-[8rem] lg:text-[11rem] font-bold tracking-tighter leading-[0.75] text-minimal-text mb-2 md:mb-4"
+          delay={1.2}
+        />
+        <TypewriterText
+          text="DEVELOPER"
+          className="text-5xl sm:text-7xl md:text-[8rem] lg:text-[11rem] font-bold tracking-tighter leading-[0.75] text-minimal-text mb-8 md:mb-12"
+          delay={1.4}
+        />
+
         <motion.div
-          initial={{ y: "100%" }}
-          whileInView={{ y: 0 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+          transition={{ delay: 2, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          className="space-y-4 max-w-2xl mx-auto border-l border-minimal-accent/30 pl-6 md:pl-8 text-left mb-12 md:mb-16"
         >
-          <span className="text-minimal-accent font-tech uppercase tracking-widest text-xs md:text-sm">
-            // Welcome to my digital space
-          </span>
+          <p className="text-base sm:text-lg md:text-2xl text-minimal-text font-sans font-medium leading-tight">
+            デジタルと感性が交差する、<br className="md:hidden" />新しい体験の形を構築する。
+          </p>
+          <p className="text-[10px] md:text-sm text-minimal-gray tracking-[0.2em] uppercase font-tech">
+            Crafting high-end digital experiences <br className="hidden md:block" /> with focus on motion and performance.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 2.2, duration: 0.8 }}
+          className="flex flex-col sm:flex-row gap-6 md:gap-12 items-center justify-center pt-4"
+        >
+          <Magnetic strength={0.3}>
+            <button
+              onClick={() => scrollToSection('projects')}
+              className="w-full sm:w-auto group relative px-10 md:px-12 py-4 md:py-5 bg-minimal-accent text-white hover:bg-indigo-700 transition-all duration-500 rounded-full focus:outline-none overflow-hidden"
+            >
+              <motion.div
+                className="absolute inset-0 bg-white/10 -translate-x-full group-hover:translate-x-full transition-transform duration-700 skew-x-12"
+              />
+              <span className="relative z-10 text-xs md:text-sm tracking-[0.2em] uppercase font-tech font-bold">
+                See My Work
+              </span>
+            </button>
+          </Magnetic>
+
+          <Magnetic strength={0.3}>
+            <button
+              onClick={() => scrollToSection('about')}
+              className="w-full sm:w-auto group relative px-10 md:px-12 py-4 md:py-5 border border-minimal-text/10 hover:border-minimal-text transition-all duration-500 rounded-full focus:outline-none"
+            >
+              <span className="relative z-10 text-xs md:text-sm tracking-[0.2em] uppercase font-tech text-minimal-text group-hover:text-minimal-accent transition-colors">
+                Contact
+              </span>
+            </button>
+          </Magnetic>
+        </motion.div>
+      </motion.div>
+
+      {/* Infinite Marquee */}
+      <div className="absolute bottom-12 left-0 w-full overflow-hidden opacity-20 whitespace-nowrap">
+        <motion.div
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ duration: 20, ease: "linear", repeat: Infinity }}
+          className="inline-block text-[10vw] font-black tracking-tighter text-minimal-text py-4"
+        >
+          EXPERIENCE DESIGN — CREATIVE TECH — UI ARCHITECTURE — EXPERIENCE DESIGN — CREATIVE TECH — UI ARCHITECTURE —
         </motion.div>
       </div>
 
-      <TypewriterText
-        text="CREATIVE DEVELOPER"
-        className="text-5xl md:text-8xl font-bold tracking-tighter mb-8 text-minimal-text"
-        delay={0.5}
-      />
-
-      <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.5, duration: 1 }}
-        className="text-sm md:text-lg text-minimal-gray tracking-[0.3em] uppercase mb-12 font-tech max-w-2xl"
-      >
-        Crafting immersive digital experiences
-      </motion.p>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.8, duration: 0.8 }}
-        className="flex flex-col md:flex-row gap-8 items-center"
-      >
-        <button
-          onClick={() => scrollToSection('projects')}
-          className="group relative px-8 py-3 bg-minimal-accent text-white hover:bg-blue-600 transition-all duration-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-minimal-accent focus:ring-offset-2"
-          aria-label="プロジェクト一覧を見る"
-        >
-          <span className="relative z-10 text-sm tracking-widest uppercase font-tech">
-            View Projects
-          </span>
-        </button>
-
-        <button
-          onClick={() => scrollToSection('about')}
-          className="group relative px-8 py-3 border border-minimal-text/20 hover:border-minimal-accent hover:text-minimal-accent transition-all duration-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-minimal-accent/50"
-          aria-label="お問い合わせページへ"
-        >
-          <span className="relative z-10 text-sm tracking-widest uppercase font-tech text-minimal-text group-hover:text-minimal-accent transition-colors">
-            Contact Me
-          </span>
-        </button>
-      </motion.div>
-    </motion.div>
+      {/* Decorative Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-32 bg-gradient-to-b from-minimal-accent to-transparent opacity-20" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-px h-32 bg-gradient-to-t from-minimal-accent to-transparent opacity-20" />
+      </div>
+    </div>
   );
 };
+
+
+

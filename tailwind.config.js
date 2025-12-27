@@ -14,9 +14,10 @@ export default {
         'minimal-light': '#f3f4f6',
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        tech: ['Space Grotesk', 'sans-serif'],
-        display: ['Syncopate', 'sans-serif'],
+        sans: ['Inter', 'Noto Sans JP', 'sans-serif'],
+        tech: ['Space Grotesk', 'Zen Kaku Gothic New', 'sans-serif'],
+        display: ['Syncopate', 'Zen Kaku Gothic New', 'sans-serif'],
+        serif: ['Yuji Syuku', 'serif'],
       },
       animation: {
         'fade-in': 'fadeIn 1s ease-out',

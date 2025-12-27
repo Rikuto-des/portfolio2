@@ -1,155 +1,137 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { useRef, useMemo, memo, useEffect } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Float } from '@react-three/drei';
+import * as THREE from 'three';
 
-interface Dot {
-  x: number;
-  y: number;
-  baseX: number;
-  baseY: number;
-  size: number;
-  color: string;
-  vx: number;
-  vy: number;
-}
-
-export const MinimalBackground = memo(() => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [mousePos, setMousePos] = useState({ x: -1000, y: -1000 });
-  const dotsRef = useRef<Dot[]>([]);
-  const animationRef = useRef<number | null>(null);
+const AnimatedShapes = () => {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const scrollRef = useRef(0);
+  const mouseRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      initDots();
-    };
-
-    const initDots = () => {
-      const dots: Dot[] = [];
-      const spacing = 60;
-      const cols = Math.ceil(canvas.width / spacing) + 1;
-      const rows = Math.ceil(canvas.height / spacing) + 1;
-
-      for (let i = 0; i < cols; i++) {
-        for (let j = 0; j < rows; j++) {
-          dots.push({
-            x: i * spacing,
-            y: j * spacing,
-            baseX: i * spacing,
-            baseY: j * spacing,
-            size: 2,
-            color: '#cbd5e1',
-            vx: 0,
-            vy: 0,
-          });
-        }
-      }
-      dotsRef.current = dots;
-    };
-
-    const animate = () => {
-      if (!ctx || !canvas) return;
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      const interactRadius = 150;
-      const maxDisplacement = 30;
-
-      dotsRef.current.forEach((dot) => {
-        const dx = mousePos.x - dot.baseX;
-        const dy = mousePos.y - dot.baseY;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance < interactRadius && distance > 0) {
-          const force = (interactRadius - distance) / interactRadius;
-          const angle = Math.atan2(dy, dx);
-          const targetX = dot.baseX - Math.cos(angle) * force * maxDisplacement;
-          const targetY = dot.baseY - Math.sin(angle) * force * maxDisplacement;
-          
-          dot.vx += (targetX - dot.x) * 0.1;
-          dot.vy += (targetY - dot.y) * 0.1;
-          
-          // 色を青系のグラデーションで変化（控えめに）
-          const r = Math.floor(148 + force * 50);
-          const g = Math.floor(163 + force * 20);
-          const b = Math.floor(184 + force * 40);
-          dot.color = `rgba(${r}, ${g}, ${b}, ${0.4 + force * 0.3})`;
-          dot.size = 1.5 + force * 2;
-        } else {
-          dot.vx += (dot.baseX - dot.x) * 0.05;
-          dot.vy += (dot.baseY - dot.y) * 0.05;
-          dot.color = 'rgba(203, 213, 225, 0.4)';
-          dot.size += (1.5 - dot.size) * 0.1;
-        }
-
-        dot.vx *= 0.9;
-        dot.vy *= 0.9;
-        dot.x += dot.vx;
-        dot.y += dot.vy;
-
-        ctx.beginPath();
-        ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
-        ctx.fillStyle = dot.color;
-        ctx.fill();
-      });
-
-      // ドット間を線で接続（近いもの同士）
-      ctx.strokeStyle = 'rgba(203, 213, 225, 0.15)';
-      ctx.lineWidth = 0.3;
-      for (let i = 0; i < dotsRef.current.length; i++) {
-        for (let j = i + 1; j < dotsRef.current.length; j++) {
-          const dotA = dotsRef.current[i];
-          const dotB = dotsRef.current[j];
-          const dx = dotA.x - dotB.x;
-          const dy = dotA.y - dotB.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          
-          if (dist < 80) {
-            ctx.beginPath();
-            ctx.moveTo(dotA.x, dotA.y);
-            ctx.lineTo(dotB.x, dotB.y);
-            ctx.stroke();
-          }
-        }
-      }
-
-      animationRef.current = requestAnimationFrame(animate);
-    };
-
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
+      mouseRef.current = {
+        x: (e.clientX / window.innerWidth) * 2 - 1,
+        y: -(e.clientY / window.innerHeight) * 2 + 1,
+      };
     };
-
-    const handleMouseLeave = () => {
-      setMousePos({ x: -1000, y: -1000 });
-    };
-
-    window.addEventListener('resize', resizeCanvas);
     window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseleave', handleMouseLeave);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
-    resizeCanvas();
-    animate();
+  // スクロール位置を取得
+  useFrame((state) => {
+    const scrollY = window.scrollY;
+    scrollRef.current = THREE.MathUtils.lerp(scrollRef.current, scrollY, 0.1);
 
-    return () => {
-      window.removeEventListener('resize', resizeCanvas);
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseleave', handleMouseLeave);
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, [mousePos]);
+    if (meshRef.current) {
+      meshRef.current.rotation.x = state.clock.getElapsedTime() * 0.2 + scrollRef.current * 0.001;
+      meshRef.current.rotation.y = state.clock.getElapsedTime() * 0.3 + scrollRef.current * 0.002;
+      meshRef.current.position.y = Math.sin(state.clock.getElapsedTime() * 0.5) * 0.2;
+
+      // マウスに追従（控えめに）
+      meshRef.current.position.x = THREE.MathUtils.lerp(meshRef.current.position.x, 2 + mouseRef.current.x * 0.5, 0.1);
+      meshRef.current.position.y = THREE.MathUtils.lerp(meshRef.current.position.y, mouseRef.current.y * 0.5, 0.1);
+    }
+  });
 
   return (
-    <div className="fixed inset-0 z-0 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100" aria-hidden="true">
-      <canvas ref={canvasRef} className="w-full h-full" />
+    <group>
+      <Float speed={2} rotationIntensity={1} floatIntensity={1}>
+        <mesh ref={meshRef} position={[2, 0, -2]}>
+          <octahedronGeometry args={[1.5, 0]} />
+          <meshPhongMaterial
+            color="#6366f1"
+            wireframe
+            transparent
+            opacity={0.1}
+          />
+        </mesh>
+      </Float>
+
+      <Float speed={1.5} rotationIntensity={0.5} floatIntensity={0.5}>
+        <mesh position={[-3, 1, -2]}>
+          <icosahedronGeometry args={[1.2, 0]} />
+          <meshPhongMaterial
+            color="#818cf8"
+            wireframe
+            transparent
+            opacity={0.08}
+          />
+        </mesh>
+      </Float>
+
+      <mesh position={[0, -2, -5]} rotation={[Math.PI / 4, 0, 0]}>
+        <torusGeometry args={[12, 0.01, 16, 150]} />
+        <meshBasicMaterial color="#cbd5e1" transparent opacity={0.1} />
+      </mesh>
+    </group>
+  );
+};
+
+const Particles = ({ count = 500 }) => {
+  const mesh = useRef<THREE.Points>(null);
+
+  const particles = useMemo(() => {
+    const temp = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      temp[i * 3] = (Math.random() - 0.5) * 30;
+      temp[i * 3 + 1] = (Math.random() - 0.5) * 30;
+      temp[i * 3 + 2] = (Math.random() - 0.5) * 30;
+    }
+    return temp;
+  }, [count]);
+
+  useFrame((state) => {
+    if (mesh.current) {
+      mesh.current.rotation.y = state.clock.getElapsedTime() * 0.02;
+      mesh.current.rotation.x = Math.sin(state.clock.getElapsedTime() * 0.05) * 0.05;
+
+      const scrollY = window.scrollY;
+      mesh.current.position.y = -scrollY * 0.002;
+    }
+  });
+
+  return (
+    <points ref={mesh}>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          count={particles.length / 3}
+          array={particles}
+          itemSize={3}
+          args={[particles, 3]}
+        />
+      </bufferGeometry>
+      <pointsMaterial
+        size={0.02}
+        color="#94a3b8"
+        transparent
+        opacity={0.3}
+        sizeAttenuation
+      />
+    </points>
+  );
+};
+
+export const MinimalBackground = memo(() => {
+  return (
+    <div className="fixed inset-0 z-0 bg-gradient-to-br from-slate-50 via-white to-blue-50" aria-hidden="true">
+      <Canvas
+        camera={{ position: [0, 0, 5], fov: 75 }}
+        gl={{ antialias: true, alpha: true }}
+        dpr={[1, 2]}
+      >
+        <ambientLight intensity={0.5} />
+        <pointLight position={[10, 10, 10]} intensity={1} />
+        <spotLight position={[-10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
+
+        <AnimatedShapes />
+        <Particles count={1000} />
+
+        <fog attach="fog" args={['#f8fafc', 5, 15]} />
+      </Canvas>
     </div>
   );
 });
+
